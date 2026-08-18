@@ -11,7 +11,7 @@ import {
 import { articles as ctrl } from "../controllers/index.js";
 import { createArticleController } from "../controllers/articles/index.js";
 import { upload } from "../middleware/upload.js";
-import { uploadErrorHandler } from "../middleware/uploadErrorHandler.js";
+// import { uploadErrorHandler } from "../middleware/uploadErrorHandler.js";
 import authMiddleware from "../middleware/authMiddleware.js";
 
 
