@@ -26,6 +26,7 @@ export const getArticles = async (req, res, next) => {
 
     const [articles, totalItems] = await Promise.all([
       ArticleModel.find(filter)
+        .populate("ownerId", "name")
         .sort(sort)
         .skip(skip)
         .limit(itemsPerPage)
@@ -43,7 +44,8 @@ export const getArticles = async (req, res, next) => {
       desc: article.desc,
       article: article.article,
       rate: article.rate,
-      ownerId: article.ownerId,
+      ownerId: article.ownerId?._id?.toString() ?? "",
+      author: article.ownerId?.name ?? null,
       date: article.date,
     }));
 
