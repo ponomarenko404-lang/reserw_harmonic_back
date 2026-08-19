@@ -1,10 +1,10 @@
-import { Router } from "express";
-import authMiddleware from "../middleware/authMiddleware.js";
-import { celebrate } from "celebrate";
-import { auth as ctrl } from "../controllers/index.js";
-import { loginUser } from "../controllers/auth/authController.js";
-import { loginUserSchema } from "../validations/userValidation.js";
-import { registerUserModel } from "../validations/authValidation.js";
+import { Router } from 'express';
+import authMiddleware from '../middleware/authMiddleware.js';
+import { celebrate } from 'celebrate';
+import { auth as ctrl } from '../controllers/index.js';
+import { loginUser } from '../controllers/auth/authController.js';
+import { loginUserSchema } from '../validations/userValidation.js';
+import { registerUserModel } from '../validations/authValidation.js';
 
 export const authRouter = Router();
 
@@ -34,7 +34,7 @@ export const authRouter = Router();
  *       401:
  *         description: Invalid credentials
  */
-authRouter.post("/login", celebrate(loginUserSchema), loginUser);
+authRouter.post('/login', celebrate(loginUserSchema), loginUser);
 
 /**
  * @swagger
@@ -58,7 +58,7 @@ authRouter.post("/login", celebrate(loginUserSchema), loginUser);
  *       409:
  *         description: User with this email already exists
  */
-authRouter.post("/register", celebrate(registerUserModel), ctrl.registerUser);
+authRouter.post('/register', celebrate(registerUserModel), ctrl.registerUser);
 
 /**
  * @swagger
@@ -76,7 +76,7 @@ authRouter.post("/register", celebrate(registerUserModel), ctrl.registerUser);
  *       401:
  *         description: Unauthorized
  */
-authRouter.post("/logout", authMiddleware, ctrl.logoutUser);
+authRouter.post('/logout', authMiddleware, ctrl.logoutUser);
 
 /**
  * @swagger
@@ -100,5 +100,4 @@ authRouter.post("/logout", authMiddleware, ctrl.logoutUser);
  *       401:
  *         description: Session not found or refresh token expired
  */
-authRouter.post("/refresh", ctrl.refreshUserSession);
-authRouter.get("/current", authMiddleware, ctrl.currentUser);
+authRouter.post('/refresh', ctrl.refreshUserSession);
