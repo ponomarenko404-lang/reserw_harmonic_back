@@ -21,7 +21,9 @@ import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./swagger.js";
 
 const app = express();
+
 const port = Number(process.env.PORT) || 3000;
+
 const allowedOrigins = [
   process.env.FRONTEND_ORIGIN,
   "http://localhost:3000",
@@ -33,12 +35,15 @@ app.use(express.json());
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (!origin) {
         callback(null, true);
         return;
       }
 
-      callback(null, false);
+      const isAllowed =
+        allowedOrigins.includes(origin) || origin.endsWith(".vercel.app");
+
+      callback(null, isAllowed);
     },
     credentials: true,
     methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
@@ -65,4 +70,6 @@ app.use(errorHandler);
 
 await connectToMongoDB();
 
-app.listen(port, () => console.log(`Server running on port ${port}`));
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
+});
