@@ -1,8 +1,8 @@
-import { Router } from "express";
-import { celebrate } from "celebrate";
-import { users as ctrl } from "../controllers/index.js";
-import { userIdParamSchema } from "../validations/userValidation.js";
-import authMiddleware from "../middleware/authMiddleware.js";
+import { Router } from 'express';
+import { celebrate } from 'celebrate';
+import { users as ctrl } from '../controllers/index.js';
+import { userIdParamSchema } from '../validations/userValidation.js';
+import authMiddleware from '../middleware/authMiddleware.js';
 
 export const usersRouter = Router();
 
@@ -43,7 +43,7 @@ export const usersRouter = Router();
  *       401:
  *         description: Unauthorized
  */
-usersRouter.get("/me/saved-articles", authMiddleware, ctrl.getSavedArticles);
+usersRouter.get('/me/saved-articles', authMiddleware, ctrl.getSavedArticles);
 
 /**
  * @swagger
@@ -112,13 +112,13 @@ usersRouter.get("/me/saved-articles", authMiddleware, ctrl.getSavedArticles);
  *         description: Article is not saved
  */
 usersRouter.post(
-  "/me/saved-articles/:articleId",
+  '/me/saved-articles/:articleId',
   authMiddleware,
   ctrl.addSavedArticle,
 );
 
 usersRouter.delete(
-  "/me/saved-articles/:articleId",
+  '/me/saved-articles/:articleId',
   authMiddleware,
   ctrl.removeSavedArticle,
 );
@@ -225,7 +225,7 @@ usersRouter.patch("/me", authMiddleware, ctrl.updateCurrentUser);
  *       404:
  *         description: User not found
  */
-usersRouter.get("/:userId", celebrate(userIdParamSchema), ctrl.getUserById);
+usersRouter.get('/:userId', celebrate(userIdParamSchema), ctrl.getUserById);
 
 /**
  * @swagger
@@ -268,7 +268,7 @@ usersRouter.get("/:userId", celebrate(userIdParamSchema), ctrl.getUserById);
  *         description: User not found
  */
 usersRouter.get(
-  "/:userId/articles",
+  '/:userId/articles',
   celebrate(userIdParamSchema),
   ctrl.getUserArticles,
 );
@@ -308,6 +308,6 @@ usersRouter.get(
  *       400:
  *         description: Invalid page or limit parameters
  */
-usersRouter.get("/", ctrl.getAuthors);
+usersRouter.get('/', ctrl.getAuthors);
 
 
