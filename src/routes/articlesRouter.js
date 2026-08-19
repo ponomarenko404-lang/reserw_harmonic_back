@@ -1,6 +1,6 @@
 
 import { Router } from "express";
-import { celebrate, Segments } from "celebrate";
+import { celebrate } from "celebrate";
 import {
   updateArticleSchema,
   getIdSchema,
