@@ -100,4 +100,4 @@ authRouter.post('/logout', authMiddleware, ctrl.logoutUser);
  *       401:
  *         description: Session not found or refresh token expired
  */
-authRouter.post('/refresh', ctrl.refreshUserSession);
+authRouter.post("/refresh", ctrl.refreshUserSession);
