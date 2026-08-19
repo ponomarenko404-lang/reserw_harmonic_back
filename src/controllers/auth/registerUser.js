@@ -1,6 +1,8 @@
-import bcrypt from 'bcrypt';
-import createHttpError from 'http-errors';
-import { UserModel } from '../../models/user.js';
+import bcrypt from "bcrypt";
+import createHttpError from "http-errors";
+
+import { UserModel } from "../../models/user.js";
+import { createSession, setSessionCookies } from "../../services/auth.js";
 
 export const registerUser = async (req, res) => {
   const { name, email, password } = req.body;
@@ -8,7 +10,7 @@ export const registerUser = async (req, res) => {
   const existingUser = await UserModel.findOne({ email });
 
   if (existingUser) {
-    throw createHttpError(409, 'Email in use');
+    throw createHttpError(409, "Email in use");
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -18,6 +20,9 @@ export const registerUser = async (req, res) => {
     email,
     password: hashedPassword,
   });
+
+  const newSession = await createSession(newUser._id);
+  setSessionCookies(res, newSession);
 
   res.status(201).json({
     user: {
