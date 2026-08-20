@@ -31,8 +31,8 @@ export const usersRouter = Router();
  *         schema:
  *           type: integer
  *           minimum: 1
- *           default: 10
- *         example: 10
+ *           default: 12
+ *         example: 12
  *     responses:
  *       200:
  *         description: Saved articles successfully retrieved
@@ -136,6 +136,13 @@ usersRouter.delete(
  *     responses:
  *       200:
  *         description: Current user successfully retrieved
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   $ref: '#/components/schemas/User'
  *       401:
  *         description: Unauthorized
  *       404:

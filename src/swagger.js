@@ -3,7 +3,7 @@ import joiToSwagger from "joi-to-swagger";
 import { registerUserModel } from "./validations/authValidation.js";
 
 const registerUserSchema = joiToSwagger(
-  registerUserModel[Object.keys(registerUserModel)[0]]
+  registerUserModel[Object.keys(registerUserModel)[0]],
 ).swagger;
 
 const options = {
@@ -19,6 +19,25 @@ const options = {
     servers: [
       {
         url: process.env.SERVER_URL || "http://localhost:3000",
+      },
+    ],
+
+    tags: [
+      {
+        name: "Auth",
+        description: "Authentication and session management",
+      },
+      {
+        name: "Users",
+        description: "Users, profiles and saved articles",
+      },
+      {
+        name: "Articles",
+        description: "Articles management",
+      },
+      {
+        name: "Categories",
+        description: "Article categories",
       },
     ],
 
@@ -43,57 +62,69 @@ const options = {
           },
         },
 
-       User: {
-  type: "object",
-  required: ["_id", "name", "email"],
-  properties: {
-    _id: {
-      type: "string",
-      example: "64f1a2b3c4d5e6f789012345",
-    },
-    name: {
-      type: "string",
-      minLength: 2,
-      maxLength: 32,
-      example: "John Doe",
-    },
-    email: {
-      type: "string",
-      format: "email",
-      maxLength: 64,
-      example: "user@example.com",
-    },
-    avatarUrl: {
-      type: "string",
-      format: "uri",
-      example: "https://goit.global",
-    },
-    articlesAmount: {
-      type: "integer",
-      minimum: 0,
-      example: 5,
-    },
-    savedArticles: {
-      type: "array",
-      items: {
-        type: "string",
-        example: "64f1a2b3c4d5e6f789012345",
-      },
-    },
-    createdAt: {
-      type: "string",
-      format: "date-time",
-      example: "2026-08-11T10:30:00.000Z",
-    },
-    updatedAt: {
-      type: "string",
-      format: "date-time",
-      example: "2026-08-11T10:30:00.000Z",
-    },
-  },
-},
+        User: {
+          type: "object",
+          required: ["_id", "name", "email"],
+          properties: {
+            _id: {
+              type: "string",
+              example: "64f1a2b3c4d5e6f789012345",
+            },
+            name: {
+              type: "string",
+              minLength: 2,
+              maxLength: 32,
+              example: "John Doe",
+            },
+            email: {
+              type: "string",
+              format: "email",
+              maxLength: 64,
+              example: "user@example.com",
+            },
+            avatarUrl: {
+              type: "string",
+              format: "uri",
+              example: "https://goit.global",
+            },
+            articlesAmount: {
+              type: "integer",
+              minimum: 0,
+              example: 5,
+            },
+            savedArticles: {
+              type: "array",
+              items: {
+                type: "string",
+                example: "64f1a2b3c4d5e6f789012345",
+              },
+            },
+            createdAt: {
+              type: "string",
+              format: "date-time",
+              example: "2026-08-11T10:30:00.000Z",
+            },
+            updatedAt: {
+              type: "string",
+              format: "date-time",
+              example: "2026-08-11T10:30:00.000Z",
+            },
+          },
+        },
+
         Article: {
           type: "object",
+          required: [
+            "_id",
+            "img",
+            "title",
+            "desc",
+            "article",
+            "rate",
+            "category",
+            "ownerId",
+            "date",
+          ],
           properties: {
             _id: {
               type: "string",
@@ -120,6 +151,85 @@ const options = {
             },
             article: {
               type: "string",
+              minLength: 100,
+              example: "Full article content goes here...",
+            },
+            rate: {
+              type: "number",
+              minimum: 0,
+              example: 4.5,
+            },
+            category: {
+              type: "string",
+              enum: ["popular", "general"],
+              example: "general",
+            },
+            ownerId: {
+              type: "string",
+              example: "64f1a2b3c4d5e6f789012345",
+            },
+            date: {
+              type: "string",
+              format: "date-time",
+              example: "2026-08-11T10:30:00.000Z",
+            },
+            createdAt: {
+              type: "string",
+              format: "date-time",
+              example: "2026-08-11T10:30:00.000Z",
+            },
+            updatedAt: {
+              type: "string",
+              format: "date-time",
+              example: "2026-08-11T10:30:00.000Z",
+            },
+          },
+        },
+
+        ArticleOwner: {
+          type: "object",
+          nullable: true,
+          properties: {
+            _id: {
+              type: "string",
+              example: "64f1a2b3c4d5e6f789012345",
+            },
+            name: {
+              type: "string",
+              example: "John Doe",
+            },
+            avatarUrl: {
+              type: "string",
+              format: "uri",
+              example: "https://example.com/avatar.jpg",
+            },
+          },
+        },
+
+        ArticleDetails: {
+          type: "object",
+          properties: {
+            _id: {
+              type: "string",
+              example: "64f1a2b3c4d5e6f789012345",
+            },
+            img: {
+              type: "string",
+              format: "uri",
+              example:
+                "https://res.cloudinary.com/example/image/upload/article.jpg",
+            },
+            title: {
+              type: "string",
+              example: "The Future of Technology",
+            },
+            desc: {
+              type: "string",
+              example:
+                "Technology continues to transform the way we live and work...",
+            },
+            article: {
+              type: "string",
               example: "Full article content goes here...",
             },
             rate: {
@@ -128,27 +238,11 @@ const options = {
             },
             date: {
               type: "string",
-              format: "date",
-              example: "2026-08-11",
+              format: "date-time",
+              example: "2026-08-11T10:30:00.000Z",
             },
             owner: {
-              type: "object",
-              nullable: true,
-              properties: {
-                _id: {
-                  type: "string",
-                  example: "64f1a2b3c4d5e6f789012345",
-                },
-                name: {
-                  type: "string",
-                  example: "John Doe",
-                },
-                avatarUrl: {
-                  type: "string",
-                  format: "uri",
-                  example: "https://example.com/avatar.jpg",
-                },
-              },
+              $ref: "#/components/schemas/ArticleOwner",
             },
           },
         },
@@ -159,37 +253,7 @@ const options = {
             data: {
               type: "array",
               items: {
-                type: "object",
-                properties: {
-                  _id: {
-                    type: "string",
-                    example: "64f1a2b3c4d5e6f789012345",
-                  },
-                  photo: {
-                    type: "string",
-                    format: "uri",
-                    example:
-                      "https://res.cloudinary.com/example/image/upload/article.jpg",
-                  },
-                  title: {
-                    type: "string",
-                    example: "The Future of Technology",
-                  },
-                  desc: {
-                    type: "string",
-                    example:
-                      "Technology continues to transform the way we live...",
-                  },
-                  article: {
-                    type: "string",
-                    example: "Full article content goes here...",
-                  },
-                  date: {
-                    type: "string",
-                    format: "date",
-                    example: "2026-08-11",
-                  },
-                },
+                $ref: "#/components/schemas/Article",
               },
             },
             page: {
@@ -198,7 +262,7 @@ const options = {
             },
             perPage: {
               type: "integer",
-              example: 10,
+              example: 12,
             },
             totalItems: {
               type: "integer",
@@ -207,6 +271,41 @@ const options = {
             totalPages: {
               type: "integer",
               example: 3,
+            },
+          },
+        },
+
+        CreateArticleResponse: {
+          type: "object",
+          properties: {
+            status: {
+              type: "integer",
+              example: 201,
+            },
+            message: {
+              type: "string",
+              example: "Successfully created an article!",
+            },
+            data: {
+              $ref: "#/components/schemas/Article",
+            },
+          },
+        },
+
+        UpdateArticleResponse: {
+          type: "object",
+          properties: {
+            status: {
+              type: "integer",
+              example: 200,
+            },
+            message: {
+              type: "string",
+              example:
+                "Article with id 64f1a2b3c4d5e6f789012345 updated successfully",
+            },
+            data: {
+              $ref: "#/components/schemas/Article",
             },
           },
         },
@@ -221,25 +320,59 @@ const options = {
               },
             },
             pagination: {
-              type: "object",
-              properties: {
-                page: {
-                  type: "integer",
-                  example: 1,
-                },
-                perPage: {
-                  type: "integer",
-                  example: 10,
-                },
-                totalItems: {
-                  type: "integer",
-                  example: 25,
-                },
-                totalPages: {
-                  type: "integer",
-                  example: 3,
+              $ref: "#/components/schemas/Pagination",
+            },
+          },
+        },
+
+        UserArticlesResponse: {
+          type: "object",
+          properties: {
+            articles: {
+              type: "array",
+              items: {
+                $ref: "#/components/schemas/Article",
+              },
+            },
+            pagination: {
+              $ref: "#/components/schemas/Pagination",
+            },
+          },
+        },
+
+        UserWithArticlesResponse: {
+          type: "object",
+          properties: {
+            user: {
+              $ref: "#/components/schemas/User",
+            },
+            articles: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  _id: {
+                    type: "string",
+                    example: "64f1a2b3c4d5e6f789012345",
+                  },
+                  img: {
+                    type: "string",
+                    format: "uri",
+                    example:
+                      "https://res.cloudinary.com/example/image/upload/article.jpg",
+                  },
+                  title: {
+                    type: "string",
+                    example: "The Future of Technology",
+                  },
+                  ownerId: {
+                    type: "object",
+                  },
                 },
               },
+            },
+            pagination: {
+              $ref: "#/components/schemas/Pagination",
             },
           },
         },
@@ -309,113 +442,24 @@ const options = {
           },
         },
 
-        UserArticlesResponse: {
+        Pagination: {
           type: "object",
           properties: {
-            articles: {
-              type: "array",
-              items: {
-                type: "object",
-                properties: {
-                  photo: {
-                    type: "string",
-                    format: "uri",
-                    example: "https://example.com/article.jpg",
-                  },
-                  title: {
-                    type: "string",
-                    example: "The Future of Technology",
-                  },
-                  description: {
-                    type: "string",
-                    example: "Article description...",
-                  },
-                  date: {
-                    type: "string",
-                    format: "date",
-                    example: "2026-08-11",
-                  },
-                  author: {
-                    type: "string",
-                    example: "John Doe",
-                  },
-                  ownerId: {
-                    type: "string",
-                    example: "64f1a2b3c4d5e6f789012345",
-                  },
-                },
-              },
+            page: {
+              type: "integer",
+              example: 1,
             },
-            pagination: {
-              type: "object",
-              properties: {
-                page: {
-                  type: "integer",
-                  example: 1,
-                },
-                perPage: {
-                  type: "integer",
-                  example: 10,
-                },
-                totalItems: {
-                  type: "integer",
-                  example: 25,
-                },
-                totalPages: {
-                  type: "integer",
-                  example: 3,
-                },
-              },
+            perPage: {
+              type: "integer",
+              example: 12,
             },
-          },
-        },
-
-        UserWithArticlesResponse: {
-          type: "object",
-          properties: {
-            user: {
-              $ref: "#/components/schemas/User",
+            totalItems: {
+              type: "integer",
+              example: 25,
             },
-            articles: {
-              type: "array",
-              items: {
-                type: "object",
-                properties: {
-                  img: {
-                    type: "string",
-                    format: "uri",
-                    example: "https://example.com/article.jpg",
-                  },
-                  title: {
-                    type: "string",
-                    example: "The Future of Technology",
-                  },
-                  ownerId: {
-                    type: "object",
-                  },
-                },
-              },
-            },
-            pagination: {
-              type: "object",
-              properties: {
-                page: {
-                  type: "integer",
-                  example: 1,
-                },
-                perPage: {
-                  type: "integer",
-                  example: 10,
-                },
-                totalItems: {
-                  type: "integer",
-                  example: 25,
-                },
-                totalPages: {
-                  type: "integer",
-                  example: 3,
-                },
-              },
+            totalPages: {
+              type: "integer",
+              example: 3,
             },
           },
         },
@@ -434,6 +478,16 @@ const options = {
             },
             user: {
               $ref: "#/components/schemas/User",
+            },
+          },
+        },
+
+        MessageResponse: {
+          type: "object",
+          properties: {
+            message: {
+              type: "string",
+              example: "Article added to saved articles",
             },
           },
         },
