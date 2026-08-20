@@ -16,6 +16,7 @@ import { getSavedArticles } from "./users/getSavedArticles.js";
 import { addSavedArticle } from "./users/addSavedArticle.js";
 import { removeSavedArticle } from "./users/removeSavedArticle.js";
 import { getCurrentUser } from "./users/getCurrentUser.js";
+import { getTopCreators } from "./users/getTopCreators.js"; 
 
 export const auth = {
   registerUser,
@@ -40,5 +41,6 @@ export const users = {
   updateCurrentUser,
   getAuthors,
   getCurrentUser,
+  getTopCreators, 
 };
 

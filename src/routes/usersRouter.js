@@ -194,6 +194,45 @@ usersRouter.patch("/me", authMiddleware, ctrl.updateCurrentUser);
 
 /**
  * @swagger
+ * /api/users/top:
+ *   get:
+ *     tags:
+ *       - Users
+ *     summary: Get top creators
+ *     description: Returns 6 top creators sorted by the highest number of created articles.
+ *     responses:
+ *       200:
+ *         description: Top creators successfully retrieved
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: string
+ *                         example: 64f1a2b3c4d5e6f789012345
+ *                       name:
+ *                         type: string
+ *                         example: John Doe
+ *                       avatarUrl:
+ *                         type: string
+ *                         example: /images/avatars/john.webp
+ *                       articlesAmount:
+ *                         type: integer
+ *                         example: 15
+ */
+usersRouter.get('/top', ctrl.getTopCreators);
+
+/**
+ * @swagger
  * /api/users/{userId}:
  *   get:
  *     tags:
@@ -308,12 +347,6 @@ usersRouter.get(
  *     responses:
  *       200:
  *         description: Authors successfully retrieved
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/AuthorsResponse'
- *       400:
- *         description: Invalid page or limit parameters
  */
 usersRouter.get('/', ctrl.getAuthors);
 
