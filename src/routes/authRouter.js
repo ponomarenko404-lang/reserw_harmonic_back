@@ -43,7 +43,7 @@ authRouter.post('/login', celebrate(loginUserSchema), loginUser);
  *     tags:
  *       - Auth
  *     summary: Register a new user
- *     description: Creates a new user account.
+ *     description: Creates a new user account and starts a new session.
  *     requestBody:
  *       required: true
  *       content:
@@ -53,10 +53,32 @@ authRouter.post('/login', celebrate(loginUserSchema), loginUser);
  *     responses:
  *       201:
  *         description: User successfully registered
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                       example: 64f1a2b3c4d5e6f789012345
+ *                     name:
+ *                       type: string
+ *                       example: John Doe
+ *                     email:
+ *                       type: string
+ *                       format: email
+ *                       example: user@example.com
+ *                     avatarUrl:
+ *                       type: string
+ *                       format: uri
+ *                       example: https://goit.global
  *       400:
  *         description: Validation error
  *       409:
- *         description: User with this email already exists
+ *         description: Email already in use
  */
 authRouter.post('/register', celebrate(registerUserModel), ctrl.registerUser);
 
