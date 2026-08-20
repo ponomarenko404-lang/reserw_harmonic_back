@@ -31,8 +31,8 @@ export const usersRouter = Router();
  *         schema:
  *           type: integer
  *           minimum: 1
- *           default: 10
- *         example: 10
+ *           default: 12
+ *         example: 12
  *     responses:
  *       200:
  *         description: Saved articles successfully retrieved
@@ -122,6 +122,75 @@ usersRouter.delete(
   authMiddleware,
   ctrl.removeSavedArticle,
 );
+
+/**
+ * @swagger
+ * /api/users/me:
+ *   get:
+ *     tags:
+ *       - Users
+ *     summary: Get current user
+ *     description: Returns the authenticated user's profile.
+ *     security:
+ *       - cookieAuth: []
+ *     responses:
+ *       200:
+ *         description: Current user successfully retrieved
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   $ref: '#/components/schemas/User'
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: User not found
+ */
+usersRouter.get("/me", authMiddleware, ctrl.getCurrentUser);
+
+/**
+ * @swagger
+ * /api/users/me:
+ *   patch:
+ *     tags:
+ *       - Users
+ *     summary: Update current user
+ *     description: Updates the authenticated user's name or contact information.
+ *     security:
+ *       - cookieAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             minProperties: 1
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 minLength: 2
+ *                 maxLength: 32
+ *                 example: John Doe
+ *               contactInfo:
+ *                 type: string
+ *                 example: john@example.com
+ *     responses:
+ *       200:
+ *         description: User successfully updated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UpdateUserResponse'
+ *       400:
+ *         description: At least one field must be provided
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: User not found
+ */
+usersRouter.patch("/me", authMiddleware, ctrl.updateCurrentUser);
 
 /**
  * @swagger
@@ -248,68 +317,4 @@ usersRouter.get(
  */
 usersRouter.get('/', ctrl.getAuthors);
 
-/**
- * @swagger
- * /api/users/me:
- *   get:
- *     tags:
- *       - Users
- *     summary: Get current user
- *     description: Returns the profile information of the currently authenticated user.
- *     security:
- *       - cookieAuth: []
- *     responses:
- *       200:
- *         description: User profile successfully retrieved
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/UserResponse'
- *       401:
- *         description: Unauthorized
- *       404:
- *         description: User not found
- */
-usersRouter.get('/me', authMiddleware, ctrl.currentUser);
 
-/**
- * @swagger
- * /api/users/me:
- *   patch:
- *     tags:
- *       - Users
- *     summary: Update current user
- *     description: Updates the authenticated user's name or contact information.
- *     security:
- *       - cookieAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             minProperties: 1
- *             properties:
- *               name:
- *                 type: string
- *                 minLength: 2
- *                 maxLength: 32
- *                 example: John Doe
- *               contactInfo:
- *                 type: string
- *                 example: john@example.com
- *     responses:
- *       200:
- *         description: User successfully updated
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/UpdateUserResponse'
- *       400:
- *         description: At least one field must be provided
- *       401:
- *         description: Unauthorized
- *       404:
- *         description: User not found
- */
-usersRouter.patch('/me', authMiddleware, ctrl.updateCurrentUser);
